@@ -1,4 +1,19 @@
 import sys
+import ctypes
+
+def enforce_single_instance():
+    """Ensure only one instance of Checkpoint runs at a time on Windows."""
+    if sys.platform == 'win32':
+        mutex_name = "Checkpoint_Application_Mutex_123"
+        mutex = ctypes.windll.kernel32.CreateMutexW(None, False, mutex_name)
+        last_error = ctypes.windll.kernel32.GetLastError()
+        # ERROR_ALREADY_EXISTS is 183
+        if last_error == 183:
+            print("Another instance of Checkpoint is already running. Exiting.")
+            sys.exit(0)
+        # Keep the mutex reference alive for the duration of the program
+        return mutex
+    return None
 
 def check_dependencies():
     """Ensure all required third-party packages are installed"""
@@ -16,6 +31,7 @@ def check_dependencies():
         sys.exit(1)
 
 def main():
+    _mutex = enforce_single_instance()
     check_dependencies()
     
     # Imports are done lazily after dependency check to give a cleaner error message
