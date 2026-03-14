@@ -1,0 +1,7 @@
+google-api-python-client
+google-auth-oauthlib
+pystray
+Pillow
+watchdog
+psutil
+PyInstaller
