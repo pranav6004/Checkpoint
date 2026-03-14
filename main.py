@@ -23,6 +23,14 @@ def main():
     from uploader import DriveUploader
     from watcher import Watcher
     from tray import TrayMenu
+    from config import config_manager
+    from startup_manager import enable_startup, disable_startup
+
+    # Sync startup registry setting with config file preference
+    if config_manager.config.start_with_windows:
+        enable_startup()
+    else:
+        disable_startup()
 
     # 1. Initialize Uploader (handles Google Drive OAuth)
     # Note: On first run, this pops open the browser for authentication

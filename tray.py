@@ -8,6 +8,7 @@ import tkinter as tk
 from tkinter import filedialog, simpledialog
 
 from config import config_manager
+from startup_manager import enable_startup, disable_startup
 
 class TrayMenu:
     def __init__(self, watcher, uploader):
@@ -50,6 +51,11 @@ class TrayMenu:
             pystray.MenuItem("Backup Now", self.action_backup_now),
             pystray.MenuItem("Add Game", self.action_add_game),
             pystray.MenuItem("Open Config File", self.action_open_settings),
+            pystray.MenuItem(
+                "Run on Startup", 
+                self.action_toggle_startup, 
+                checked=lambda item: config_manager.config.start_with_windows
+            ),
             pystray.Menu.SEPARATOR,
             pystray.MenuItem("Quit", self.action_quit)
         )
@@ -137,3 +143,18 @@ class TrayMenu:
                 print(f"NOTIFICATION: {title} - {message}")
         else:
             print(f"NOTIFICATION: {title} - {message}")
+
+    def action_toggle_startup(self, icon, item):
+        new_state = not config_manager.config.start_with_windows
+        
+        if new_state:
+            success = enable_startup()
+        else:
+            success = disable_startup()
+            
+        if success:
+            config_manager.config.start_with_windows = new_state
+            config_manager.save_config()
+            self.notify("Startup Setting", f"Run on Startup is now {'Enabled' if new_state else 'Disabled'}")
+        else:
+            self.notify("Error", "Failed to change startup setting.")

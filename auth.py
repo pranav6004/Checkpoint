@@ -56,6 +56,19 @@ def authenticate():
         # Save the credentials for the next run
         with open(token_path, 'w') as token:
             token.write(creds.to_json())
+            
+        # Security Audit Fix: Lock down permissions on the token file
+        if os.name == 'nt':
+            import subprocess
+            try:
+                username = os.environ.get('USERNAME')
+                subprocess.run(
+                    ['icacls', token_path, '/inheritance:r', '/grant', f'{username}:F'],
+                    capture_output=True,
+                    creationflags=subprocess.CREATE_NO_WINDOW
+                )
+            except Exception as perm_err:
+                print(f"Warning: Could not set strict permissions on token file: {perm_err}")
 
     return creds
 

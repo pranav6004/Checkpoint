@@ -65,6 +65,22 @@ class ConfigManager:
             with open(self.config_path, 'w', encoding='utf-8') as f:
                 # Disable ascii conversion so we can handle unicode chars in paths
                 json.dump(asdict(config), f, indent=4, ensure_ascii=False)
+                
+            # Security Audit Fix: Lock down permissions on the config file
+            if os.name == 'nt':
+                import subprocess
+                try:
+                    # /inheritance:r removes inherited permissions
+                    # /grant "%USERNAME%:F" gives the current user Full Control
+                    username = os.environ.get('USERNAME')
+                    subprocess.run(
+                        ['icacls', self.config_path, '/inheritance:r', '/grant', f'{username}:F'],
+                        capture_output=True,
+                        creationflags=subprocess.CREATE_NO_WINDOW
+                    )
+                except Exception as perm_err:
+                    print(f"Warning: Could not set strict permissions on config file: {perm_err}")
+
             self.config = config
             return True
         except Exception as e:
@@ -75,13 +91,16 @@ class ConfigManager:
         # Format the path cleanly
         save_path = os.path.normpath(save_path)
         
-        # Check if game already exists and update it
+        # Check for duplicates by name OR by exact path
         for i, game in enumerate(self.config.games):
-            if game.name == name:
+            if game.name.lower() == name.lower():
                 self.config.games[i] = GameConfig(name, save_path, max_backups)
                 return self.save_config()
+            elif os.path.normcase(game.save_path) == os.path.normcase(save_path):
+                print(f"Duplicate path skipped: {save_path} is already being tracked by {game.name}")
+                return False
                 
-        # Or append new game
+        # Append new game
         self.config.games.append(GameConfig(name, save_path, max_backups))
         return self.save_config()
         

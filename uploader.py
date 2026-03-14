@@ -69,11 +69,12 @@ class DriveUploader:
             return False
             
         print(f"Uploading {game_config.name} saves from {game_config.save_path}...")
-        game_folder_id = self._get_or_create_folder(game_config.name, self.root_folder_id)
         
-        zip_path, zip_filename = self._zip_folder(game_config.save_path, game_config.name)
-        
+        zip_path = None
         try:
+            game_folder_id = self._get_or_create_folder(game_config.name, self.root_folder_id)
+            zip_path, zip_filename = self._zip_folder(game_config.save_path, game_config.name)
+            
             file_metadata = {
                 'name': zip_filename,
                 'parents': [game_folder_id]
@@ -93,11 +94,12 @@ class DriveUploader:
             return True
             
         except Exception as e:
+            # Broad exception catch to prevent mass uploads from crashing the thread
             print(f"Error uploading {game_config.name} to Drive: {e}")
             return False
         finally:
             # Clean up local temporary zip file
-            if os.path.exists(zip_path):
+            if zip_path and os.path.exists(zip_path):
                 # The googleapiclient MediaFileUpload maintains an open file handle
                 # We need to wait a tiny bit for it to be released on Windows.
                 import time
@@ -113,10 +115,10 @@ class DriveUploader:
                     try:
                         os.remove(zip_path)
                         break
-                    except Exception as e:
+                    except Exception as cleanup_err:
                         time.sleep(1)
                 else:
-                    print(f"Warning: Could not remove temp file {zip_path} after 3 attempts. It will be cleaned by the OS eventually.")
+                    print(f"Warning: Could not remove temp file {zip_path} after 3 attempts.")
 
     def _cleanup_old_backups(self, folder_id, max_backups):
         # Order by creation time descending (newest first)
