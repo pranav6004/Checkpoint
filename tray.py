@@ -15,6 +15,7 @@ class TrayMenu:
         self.watcher = watcher
         self.uploader = uploader
         self.icon = None
+        self.is_scanning = False
         self.watcher.set_notification_callback(self.notify)
 
     def create_image(self):
@@ -45,11 +46,14 @@ class TrayMenu:
 
     def _create_menu(self):
         game_count = len(config_manager.config.games)
+        
+        scan_item = pystray.MenuItem("Scanning for Games (Please Wait)...", lambda: None, enabled=False) if self.is_scanning else pystray.MenuItem("Scan for Games (Auto-Detect)", self.action_scan_games)
+        
         return pystray.Menu(
             pystray.MenuItem(f"● Watching {game_count} games", lambda: None, enabled=False),
             pystray.Menu.SEPARATOR,
             pystray.MenuItem("Backup Now", self.action_backup_now),
-            pystray.MenuItem("Scan for Games (Auto-Detect)", self.action_scan_games),
+            scan_item,
             pystray.MenuItem("Add Game", self.action_add_game),
             pystray.MenuItem("Open Config File", self.action_open_settings),
             pystray.MenuItem(
@@ -85,6 +89,8 @@ class TrayMenu:
 
     def action_scan_games(self, icon, item):
         def scan_job():
+            self.is_scanning = True
+            self._update_menu()
             self.notify("Scan Started", "Downloading manifest and scanning local drive. This may take 10-20 seconds...")
             
             from scanner import scan_for_games
@@ -92,6 +98,8 @@ class TrayMenu:
             
             if not found_games:
                 self.notify("Scan Complete", "No new supported games or cracked paths were detected.")
+                self.is_scanning = False
+                self._update_menu()
                 return
                 
             newly_added = config_manager.add_games_bulk(found_games)
@@ -99,7 +107,6 @@ class TrayMenu:
             if newly_added:
                 # Update watcher to pick up new folders
                 self.watcher.refresh_watches()
-                self._update_menu()
                 
                 # Format notification text
                 if len(newly_added) <= 3:
@@ -109,6 +116,9 @@ class TrayMenu:
                     self.notify("Scan Complete", f"Successfully found and added {len(newly_added)} new games!")
             else:
                 self.notify("Scan Complete", "Games were found, but they are already tracked.")
+                
+            self.is_scanning = False
+            self._update_menu()
                 
         threading.Thread(target=scan_job, daemon=True).start()
 
