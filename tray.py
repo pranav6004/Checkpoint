@@ -49,6 +49,7 @@ class TrayMenu:
             pystray.MenuItem(f"● Watching {game_count} games", lambda: None, enabled=False),
             pystray.Menu.SEPARATOR,
             pystray.MenuItem("Backup Now", self.action_backup_now),
+            pystray.MenuItem("Scan for Games (Auto-Detect)", self.action_scan_games),
             pystray.MenuItem("Add Game", self.action_add_game),
             pystray.MenuItem("Open Config File", self.action_open_settings),
             pystray.MenuItem(
@@ -81,6 +82,35 @@ class TrayMenu:
                 self.notify("Backup Complete", f"Successfully backed up {success_count} games.")
                 
         threading.Thread(target=backup_job, daemon=True).start()
+
+    def action_scan_games(self, icon, item):
+        def scan_job():
+            self.notify("Scan Started", "Downloading manifest and scanning local drive. This may take 10-20 seconds...")
+            
+            from scanner import scan_for_games
+            found_games = scan_for_games()
+            
+            if not found_games:
+                self.notify("Scan Complete", "No new supported games or cracked paths were detected.")
+                return
+                
+            newly_added = config_manager.add_games_bulk(found_games)
+            
+            if newly_added:
+                # Update watcher to pick up new folders
+                self.watcher.refresh_watches()
+                self._update_menu()
+                
+                # Format notification text
+                if len(newly_added) <= 3:
+                    names = ", ".join([n for n, p in newly_added])
+                    self.notify("Scan Complete", f"Added: {names}")
+                else:
+                    self.notify("Scan Complete", f"Successfully found and added {len(newly_added)} new games!")
+            else:
+                self.notify("Scan Complete", "Games were found, but they are already tracked.")
+                
+        threading.Thread(target=scan_job, daemon=True).start()
 
     def action_add_game(self, icon, item):
         def add_game_job():

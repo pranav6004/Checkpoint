@@ -23,11 +23,13 @@ def check_dependencies():
         import pystray
         import PIL
         import watchdog
+        import requests
+        import yaml
     except ImportError as e:
         print("ERROR: Missing dependencies.")
         print(f"Missing: {e.name}")
         print("\nPlease install the required packages using:")
-        print("pip install google-api-python-client google-auth-oauthlib pystray Pillow watchdog psutil")
+        print("pip install google-api-python-client google-auth-oauthlib pystray Pillow watchdog psutil requests pyyaml")
         sys.exit(1)
 
 def main():
