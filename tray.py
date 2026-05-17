@@ -93,32 +93,34 @@ class TrayMenu:
             self._update_menu()
             self.notify("Scan Started", "Downloading manifest and scanning local drive. This may take 10-20 seconds...")
             
-            from scanner import scan_for_games
-            found_games = scan_for_games()
-            
-            if not found_games:
-                self.notify("Scan Complete", "No new supported games or cracked paths were detected.")
+            try:
+                from scanner import scan_for_games
+                found_games = scan_for_games()
+                
+                if not found_games:
+                    self.notify("Scan Complete", "No new supported games or cracked paths were detected.")
+                    return
+                    
+                newly_added = config_manager.add_games_bulk(found_games)
+                
+                if newly_added:
+                    # Update watcher to pick up new folders
+                    self.watcher.refresh_watches()
+                    
+                    # Format notification text
+                    if len(newly_added) <= 3:
+                        names = ", ".join([n for n, p in newly_added])
+                        self.notify("Scan Complete", f"Added: {names}")
+                    else:
+                        self.notify("Scan Complete", f"Successfully found and added {len(newly_added)} new games!")
+                else:
+                    self.notify("Scan Complete", "Games were found, but they are already tracked.")
+            except Exception as e:
+                print(f"Error during scan: {e}")
+                self.notify("Scan Error", f"An error occurred during scan: {e}")
+            finally:
                 self.is_scanning = False
                 self._update_menu()
-                return
-                
-            newly_added = config_manager.add_games_bulk(found_games)
-            
-            if newly_added:
-                # Update watcher to pick up new folders
-                self.watcher.refresh_watches()
-                
-                # Format notification text
-                if len(newly_added) <= 3:
-                    names = ", ".join([n for n, p in newly_added])
-                    self.notify("Scan Complete", f"Added: {names}")
-                else:
-                    self.notify("Scan Complete", f"Successfully found and added {len(newly_added)} new games!")
-            else:
-                self.notify("Scan Complete", "Games were found, but they are already tracked.")
-                
-            self.is_scanning = False
-            self._update_menu()
                 
         threading.Thread(target=scan_job, daemon=True).start()
 

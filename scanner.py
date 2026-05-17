@@ -49,7 +49,7 @@ def scan_for_games():
             if 'files' in game_data:
                 for path_template, attributes in game_data['files'].items():
                     # Only grab paths marked as save data (not configs if we can avoid it, but Ludusavi generally marks saves with tags)
-                    tags = attributes.get('tags', [])
+                    tags = attributes.get('tags', []) if attributes else []
                     if 'save' in tags or not tags:
                         resolved_path = resolve_ludusavi_path(path_template)
                         
