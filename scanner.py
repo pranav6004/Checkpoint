@@ -5,6 +5,7 @@ from pathlib import Path
 
 import time
 import json
+import glob
 
 LUDUSAVI_URL = "https://raw.githubusercontent.com/mtkennerly/ludusavi-manifest/master/data/manifest.yaml"
 MANIFEST_CACHE_FILE = os.path.join(os.environ.get('APPDATA', os.path.expanduser('~')), 'Checkpoint', 'manifest_cache.json')
@@ -50,6 +51,9 @@ def resolve_ludusavi_path(path_str):
         "<winProgramFiles>": os.path.expandvars("%ProgramFiles%"),
         "<winProgramFiles86>": os.path.expandvars("%ProgramFiles(x86)%"),
         "<winProgramData>": os.path.expandvars("%ProgramData%"),
+        "<storeUserId>": "*",
+        "<osUserName>": "*",
+        "<root>": "C:\\Program Files (x86)\\Steam",
     }
     
     resolved = path_str
@@ -59,10 +63,6 @@ def resolve_ludusavi_path(path_str):
             
     # Some paths use forward slashes, normalize for Windows
     resolved = os.path.normpath(resolved)
-    
-    # Ludusavi paths often contain globs like *.sav. We need the directory.
-    while '*' in resolved or '?' in resolved:
-        resolved = os.path.dirname(resolved)
         
     return resolved
 
@@ -91,9 +91,15 @@ def scan_for_games():
                     if 'save' in tags or not tags:
                         resolved_path = resolve_ludusavi_path(path_template)
                         
-                        # Stop at the first valid path found for this game to avoid duplicate folders for the same game
-                        if os.path.exists(resolved_path) and os.path.isdir(resolved_path):
-                            found_games.append((game_name, resolved_path))
+                        matches = glob.glob(resolved_path)
+                        found = False
+                        for match in matches:
+                            save_dir = os.path.dirname(match) if os.path.isfile(match) else match
+                            if os.path.exists(save_dir) and os.path.isdir(save_dir):
+                                found_games.append((game_name, save_dir))
+                                found = True
+                                break
+                        if found:
                             break
                             
     except Exception as e:
@@ -124,6 +130,17 @@ def scan_for_games():
             app_path = os.path.join(goldberg, app_id)
             if os.path.isdir(app_path):
                 game_name = app_id_to_name.get(app_id, f"Goldberg Save {app_id}")
+                found_games.append((game_name, app_path))
+                
+    # GSE Saves AppData
+    gse_saves = os.path.join(os.path.expandvars("%APPDATA%"), "GSE Saves")
+    if os.path.exists(gse_saves):
+        for app_id in os.listdir(gse_saves):
+            if app_id == "settings":
+                continue
+            app_path = os.path.join(gse_saves, app_id)
+            if os.path.isdir(app_path):
+                game_name = app_id_to_name.get(app_id, f"GSE Save {app_id}")
                 found_games.append((game_name, app_path))
 
     return found_games
