@@ -18,7 +18,9 @@ class DriveUploader:
         self.root_folder_id = self._get_or_create_folder(ROOT_FOLDER_NAME)
         
     def _get_or_create_folder(self, folder_name, parent_id=None):
-        query = f"name='{folder_name}' and mimeType='application/vnd.google-apps.folder' and trashed=false"
+        # Escape single quotes for Google Drive API query syntax
+        safe_name = folder_name.replace("'", "\\'")
+        query = f"name='{safe_name}' and mimeType='application/vnd.google-apps.folder' and trashed=false"
         if parent_id:
             query += f" and '{parent_id}' in parents"
             
