@@ -45,7 +45,12 @@ def scan_for_games():
         response.raise_for_status()
         manifest = yaml.safe_load(response.text)
         
+        # Build steam ID to name mapping for emulator detection
+        app_id_to_name = {}
         for game_name, game_data in manifest.items():
+            if 'steam' in game_data and 'id' in game_data['steam']:
+                app_id_to_name[str(game_data['steam']['id'])] = game_name
+                
             if 'files' in game_data:
                 for path_template, attributes in game_data['files'].items():
                     # Only grab paths marked as save data (not configs if we can avoid it, but Ludusavi generally marks saves with tags)
@@ -74,7 +79,8 @@ def scan_for_games():
             for app_id in os.listdir(group_path):
                 app_path = os.path.join(group_path, app_id)
                 if os.path.isdir(app_path):
-                    found_games.append((f"{group} Save {app_id}", app_path))
+                    game_name = app_id_to_name.get(app_id, f"{group} Save {app_id}")
+                    found_games.append((game_name, app_path))
                     
     # Goldberg AppData
     if os.path.exists(goldberg):
@@ -84,6 +90,7 @@ def scan_for_games():
                 continue
             app_path = os.path.join(goldberg, app_id)
             if os.path.isdir(app_path):
-                found_games.append((f"Goldberg Save {app_id}", app_path))
+                game_name = app_id_to_name.get(app_id, f"Goldberg Save {app_id}")
+                found_games.append((game_name, app_path))
 
     return found_games
