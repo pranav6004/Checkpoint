@@ -66,7 +66,7 @@ def scan_for_games():
     goldberg = os.path.join(os.path.expandvars("%APPDATA%"), "Goldberg SteamEmu Saves")
     
     # Emu groups in Public/Documents/Steam
-    emu_groups = ["CODEX", "RUNE", "FLT", "TENOKE", "RUNE"]
+    emu_groups = ["CODEX", "RUNE", "FLT", "TENOKE"]
     for group in emu_groups:
         group_path = os.path.join(public_steam, group)
         if os.path.exists(group_path):
