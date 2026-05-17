@@ -3,7 +3,36 @@ import requests
 import yaml
 from pathlib import Path
 
+import time
+import json
+
 LUDUSAVI_URL = "https://raw.githubusercontent.com/mtkennerly/ludusavi-manifest/master/data/manifest.yaml"
+MANIFEST_CACHE_FILE = os.path.join(os.environ.get('APPDATA', os.path.expanduser('~')), 'Checkpoint', 'manifest_cache.json')
+
+def get_manifest():
+    """Fetches the manifest from cache if fresh, otherwise downloads and caches as JSON for instant loading."""
+    try:
+        if os.path.exists(MANIFEST_CACHE_FILE):
+            # Check if file is less than 7 days old (604800 seconds)
+            if time.time() - os.path.getmtime(MANIFEST_CACHE_FILE) < 604800:
+                with open(MANIFEST_CACHE_FILE, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+    except Exception as e:
+        print(f"Failed to read cache: {e}")
+        
+    print("Downloading fresh manifest...")
+    response = requests.get(LUDUSAVI_URL, timeout=10)
+    response.raise_for_status()
+    manifest = yaml.safe_load(response.text)
+    
+    try:
+        os.makedirs(os.path.dirname(MANIFEST_CACHE_FILE), exist_ok=True)
+        with open(MANIFEST_CACHE_FILE, 'w', encoding='utf-8') as f:
+            json.dump(manifest, f)
+    except Exception as e:
+        print(f"Failed to write cache: {e}")
+        
+    return manifest
 
 def resolve_ludusavi_path(path_str):
     """Replaces Ludusavi placeholders with actual Windows paths."""
@@ -11,16 +40,16 @@ def resolve_ludusavi_path(path_str):
     
     # Common Ludusavi variables
     replacements = {
-        "<USERPROFILE>": user_profile,
-        "<DOCUMENTS>": os.path.join(user_profile, "Documents"),
-        "<LOCALAPPDATA>": os.path.expandvars("%LOCALAPPDATA%"),
-        "<APPDATA>": os.path.expandvars("%APPDATA%"),
-        "<SAVEDGAMES>": os.path.join(user_profile, "Saved Games"),
-        "<PUBLIC>": os.path.expandvars("%PUBLIC%"),
-        "<WINDIR>": os.path.expandvars("%WINDIR%"),
-        "<PROGRAMFILES>": os.path.expandvars("%ProgramFiles%"),
-        "<PROGRAMFILES64>": os.path.expandvars("%ProgramFiles%"),
-        "<PROGRAMFILES86>": os.path.expandvars("%ProgramFiles(x86)%"),
+        "<winUserProfile>": user_profile,
+        "<winDocuments>": os.path.join(user_profile, "Documents"),
+        "<winLocalAppData>": os.path.expandvars("%LOCALAPPDATA%"),
+        "<winAppData>": os.path.expandvars("%APPDATA%"),
+        "<winSavedGames>": os.path.join(user_profile, "Saved Games"),
+        "<winPublic>": os.path.expandvars("%PUBLIC%"),
+        "<winDir>": os.path.expandvars("%WINDIR%"),
+        "<winProgramFiles>": os.path.expandvars("%ProgramFiles%"),
+        "<winProgramFiles86>": os.path.expandvars("%ProgramFiles(x86)%"),
+        "<winProgramData>": os.path.expandvars("%ProgramData%"),
     }
     
     resolved = path_str
@@ -29,7 +58,13 @@ def resolve_ludusavi_path(path_str):
             resolved = resolved.replace(key, val)
             
     # Some paths use forward slashes, normalize for Windows
-    return os.path.normpath(resolved)
+    resolved = os.path.normpath(resolved)
+    
+    # Ludusavi paths often contain globs like *.sav. We need the directory.
+    while '*' in resolved or '?' in resolved:
+        resolved = os.path.dirname(resolved)
+        
+    return resolved
 
 def scan_for_games():
     """
@@ -41,9 +76,7 @@ def scan_for_games():
     
     # 1. Scan Ludusavi DB
     try:
-        response = requests.get(LUDUSAVI_URL, timeout=10)
-        response.raise_for_status()
-        manifest = yaml.safe_load(response.text)
+        manifest = get_manifest()
         
         # Build steam ID to name mapping for emulator detection
         app_id_to_name = {}
