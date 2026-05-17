@@ -49,10 +49,13 @@ class TrayMenu:
         
         scan_item = pystray.MenuItem("Scanning for Games (Please Wait)...", lambda: None, enabled=False) if self.is_scanning else pystray.MenuItem("Scan for Games (Auto-Detect)", self.action_scan_games)
         
+        backup_text = getattr(self, 'backup_status_text', "Backup Now")
+        backup_item = pystray.MenuItem(backup_text, lambda: None, enabled=False) if getattr(self, 'is_backing_up', False) else pystray.MenuItem("Backup Now", self.action_backup_now)
+        
         return pystray.Menu(
             pystray.MenuItem(f"● Watching {game_count} games", lambda: None, enabled=False),
             pystray.Menu.SEPARATOR,
-            pystray.MenuItem("Backup Now", self.action_backup_now),
+            backup_item,
             scan_item,
             pystray.MenuItem("Add Game", self.action_add_game),
             pystray.MenuItem("Open Config File", self.action_open_settings),
@@ -70,20 +73,38 @@ class TrayMenu:
             self.icon.menu = self._create_menu()
 
     def action_backup_now(self, icon, item):
+        if getattr(self, 'is_backing_up', False):
+            return
+            
         # Run in thread to not block the tray UI
         def backup_job():
             if not config_manager.config.games:
                 self.notify("No Games", "Add a game first before backing up.")
                 return
                 
+            self.is_backing_up = True
+            self.backup_status_text = "Starting Backup..."
+            self._update_menu()
+            
             self.notify("Starting Backup", "Zipping and uploading all games...")
             success_count = 0
-            for game in config_manager.config.games:
-                if self.uploader.upload_save(game):
-                    success_count += 1
+            total_games = len(config_manager.config.games)
+            
+            try:
+                for idx, game in enumerate(config_manager.config.games):
+                    self.backup_status_text = f"Backing up {idx+1}/{total_games} ({game.name})..."
+                    self._update_menu()
+                    if self.uploader.upload_save(game):
+                        success_count += 1
+            except Exception as e:
+                print(f"Fatal error during bulk backup: {e}")
+            finally:
+                self.is_backing_up = False
+                self.backup_status_text = "Backup Now"
+                self._update_menu()
                     
-            if success_count > 0:
-                self.notify("Backup Complete", f"Successfully backed up {success_count} games.")
+                if success_count > 0:
+                    self.notify("Backup Complete", f"Successfully backed up {success_count} games.")
                 
         threading.Thread(target=backup_job, daemon=True).start()
 

@@ -58,7 +58,10 @@ class DriveUploader:
                         file_path = os.path.join(root, file)
                         # Archive name is the relative path
                         arcname = os.path.relpath(file_path, folder_path)
-                        zipf.write(file_path, arcname)
+                        try:
+                            zipf.write(file_path, arcname)
+                        except Exception as e:
+                            print(f"Skipping locked/unreadable file {file_path}: {e}")
                     
         return zip_path, zip_filename
 
