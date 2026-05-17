@@ -52,7 +52,7 @@ def resolve_ludusavi_path(path_str):
         "<winProgramFiles86>": os.path.expandvars("%ProgramFiles(x86)%"),
         "<winProgramData>": os.path.expandvars("%ProgramData%"),
         "<storeUserId>": "*",
-        "<osUserName>": "*",
+        "<osUserName>": os.environ.get("USERNAME"),
         "<root>": "C:\\Program Files (x86)\\Steam",
     }
     
@@ -91,7 +91,7 @@ def scan_for_games():
                     if 'save' in tags or not tags:
                         resolved_path = resolve_ludusavi_path(path_template)
                         
-                        matches = glob.glob(resolved_path)
+                        matches = glob.glob(resolved_path, recursive=True)
                         found = False
                         for match in matches:
                             save_dir = os.path.dirname(match) if os.path.isfile(match) else match
@@ -118,8 +118,9 @@ def scan_for_games():
             for app_id in os.listdir(group_path):
                 app_path = os.path.join(group_path, app_id)
                 if os.path.isdir(app_path):
-                    game_name = app_id_to_name.get(app_id, f"{group} Save {app_id}")
-                    found_games.append((game_name, app_path))
+                    game_name = app_id_to_name.get(app_id)
+                    final_name = f"{game_name} ({group})" if game_name else f"{group} Save {app_id}"
+                    found_games.append((final_name, app_path))
                     
     # Goldberg AppData
     if os.path.exists(goldberg):
@@ -129,8 +130,9 @@ def scan_for_games():
                 continue
             app_path = os.path.join(goldberg, app_id)
             if os.path.isdir(app_path):
-                game_name = app_id_to_name.get(app_id, f"Goldberg Save {app_id}")
-                found_games.append((game_name, app_path))
+                game_name = app_id_to_name.get(app_id)
+                final_name = f"{game_name} (Goldberg)" if game_name else f"Goldberg Save {app_id}"
+                found_games.append((final_name, app_path))
                 
     # GSE Saves AppData
     gse_saves = os.path.join(os.path.expandvars("%APPDATA%"), "GSE Saves")
@@ -140,7 +142,8 @@ def scan_for_games():
                 continue
             app_path = os.path.join(gse_saves, app_id)
             if os.path.isdir(app_path):
-                game_name = app_id_to_name.get(app_id, f"GSE Save {app_id}")
-                found_games.append((game_name, app_path))
+                game_name = app_id_to_name.get(app_id)
+                final_name = f"{game_name} (GSE)" if game_name else f"GSE Save {app_id}"
+                found_games.append((final_name, app_path))
 
     return found_games
