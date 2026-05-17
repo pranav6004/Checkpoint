@@ -111,5 +111,29 @@ class ConfigManager:
             return self.save_config()
         return False
 
+    def add_games_bulk(self, games_list: list) -> list:
+        added = []
+        changed = False
+        
+        existing_names = {g.name.lower() for g in self.config.games}
+        existing_paths = {os.path.normcase(g.save_path) for g in self.config.games}
+        
+        for name, save_path in games_list:
+            save_path = os.path.normpath(save_path)
+            name_lower = name.lower()
+            path_case = os.path.normcase(save_path)
+            
+            if name_lower not in existing_names and path_case not in existing_paths:
+                self.config.games.append(GameConfig(name, save_path, 10))
+                existing_names.add(name_lower)
+                existing_paths.add(path_case)
+                added.append((name, save_path))
+                changed = True
+                
+        if changed:
+            self.save_config()
+            
+        return added
+
 # Global instance
 config_manager = ConfigManager()
