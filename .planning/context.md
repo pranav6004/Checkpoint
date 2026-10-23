@@ -97,13 +97,13 @@
 - **Verification**: Scale tests verified readability at 16px/32px taskbar scales.
 
 ## 2026-10-24: Checkpoint v1.4.0 Release & Asset Finalization
-- **Task**: Finalize branding, clean up scratch drafts, build clean standalone binary, and publish GitHub Release v1.4.0.
+- **Task**: Finalize branding with recommended Concept A, clean up scratch drafts, build clean standalone binary, and publish GitHub Release v1.4.0.
 - **Actions Taken**:
-  - Adopted Concept A2 (The Floating Nucleus) as canonical brand mark (`branding/checkpoint.svg`).
-  - Exported complete asset kit (SVG, PNG 16-512, ICO, webmanifest, app icon).
+  - Officially adopted recommended Concept A (The Waypoint Beacon: 45° isometric waypoint prism with soaring Electric Cyan checkmark blade) as canonical brand mark (`branding/checkpoint.svg`).
+  - Exported complete asset kit (SVG, PNG 16-512, ICO, webmanifest, app icon, tray badge).
   - Cleaned up obsolete draft concepts from `branding/`.
   - Updated `Checkpoint.spec` and `main.spec` to remove private credential bundling (`datas=[('branding', 'branding')]`, embedded app icon).
   - Built standalone `dist\Checkpoint.exe` with PyInstaller.
-  - Tagged and published GitHub Release `v1.4.0` with release notes and binary asset attached.
+  - Tagged and published GitHub Release `v1.4.0` with release notes and binary asset attached at `https://github.com/pranav6004/Checkpoint/releases/tag/v1.4.0`.
 - **Verification**: All 12 unit tests passed in 0.165s.
 

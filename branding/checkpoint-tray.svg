@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
   <title>Checkpoint Tray Icon</title>
-  <!-- Deep Obsidian Tile -->
+  <!-- Dark Obsidian Squircle Tile for 100% contrast on any taskbar color (light or dark) -->
   <rect x="2" y="2" width="60" height="60" rx="14" fill="#0B0F19"/>
-  <!-- Outer Waypoint Ring -->
-  <path d="M 32,10 L 12,30 L 20,30 L 32,18 L 44,30 L 52,30 Z" fill="#0284C7"/>
-  <path d="M 12,30 L 32,50 L 32,42 L 20,30 Z" fill="#0369A1"/>
-  <path d="M 52,30 L 32,50 L 32,42 L 44,30 Z" fill="#0EA5E9"/>
-  <!-- Central Glowing Save Crystal Nucleus -->
-  <path d="M 32,24 L 38,30 L 32,36 L 26,30 Z" fill="#00E5FF"/>
+  <!-- Outer Waypoint Ring / Facets -->
+  <path d="M 32,10 L 12,30 L 18,30 L 32,16 L 38,22 L 44,16 Z" fill="#0284C7"/>
+  <path d="M 12,30 L 32,50 L 32,44 L 18,30 Z" fill="#0369A1"/>
+  <path d="M 32,50 L 48,34 L 42,28 L 32,38 L 32,44 Z" fill="#0284C7"/>
+  <!-- Vibrant Luminous Checkmark Blade -->
+  <path d="M 22,32 L 32,42 L 54,20 L 48,14 L 32,30 L 28,26 Z" fill="#00E5FF"/>
 </svg>

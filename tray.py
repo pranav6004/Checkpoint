@@ -35,17 +35,16 @@ class TrayMenu:
                 except Exception as e:
                     print(f"Warning: Could not open {icon_path}: {e}")
 
-        # Programmatic high-contrast fallback: Dark obsidian tile with floating save crystal core
+        # Programmatic high-contrast fallback: Dark obsidian tile with electric cyan checkmark blade
         image = Image.new('RGBA', (64, 64), (0, 0, 0, 0))
         d = ImageDraw.Draw(image)
         # Deep Obsidian badge
         d.rounded_rectangle((2, 2, 62, 62), radius=14, fill=(11, 15, 25))
-        # Tech Blue outer waypoint facets
-        d.polygon([(32, 10), (12, 30), (20, 30), (32, 18), (44, 30), (52, 30)], fill=(2, 132, 199))
-        d.polygon([(12, 30), (32, 50), (32, 42), (20, 30)], fill=(3, 105, 161))
-        d.polygon([(52, 30), (32, 50), (32, 42), (44, 30)], fill=(14, 165, 233))
-        # Floating Save Crystal Nucleus (Electric Cyan)
-        d.polygon([(32, 24), (38, 30), (32, 36), (26, 30)], fill=(0, 229, 255))
+        # Tech Blue outer frame
+        d.polygon([(32, 10), (12, 30), (18, 30), (32, 16), (38, 22), (44, 16)], fill=(2, 132, 199))
+        d.polygon([(12, 30), (32, 50), (32, 44), (18, 30)], fill=(3, 105, 161))
+        # Electric Cyan soaring checkmark blade
+        d.polygon([(22, 32), (32, 42), (54, 20), (48, 14), (32, 30), (28, 26)], fill=(0, 229, 255))
         return image
 
     def run(self):
