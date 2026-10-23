@@ -108,3 +108,15 @@
   - Cleaned release notes: removed all emojis and eliminated internal secret/security disclosure details in favor of clean, professional changelog bullets.
 - **Verification**: All 12 unit tests passed in 0.165s.
 
+## 2026-10-24: Branding Directory Streamlining
+- **Task**: Clean up unneeded web/PWA/social variants from `branding/`, retaining strictly the essential desktop app and tray production assets.
+- **Actions Taken**:
+  - Reduced `branding/` to the 11 core production files:
+    - `checkpoint.svg`, `checkpoint-black.svg`, `checkpoint-white.svg`
+    - `checkpoint-tray.svg`, `checkpoint-tray-16.png`, `checkpoint-tray-32.png`, `checkpoint-tray-64.png`
+    - `checkpoint-app-icon-64.png`, `checkpoint-app-icon-256.png`, `checkpoint-app-icon-512.png`
+    - `checkpoint.ico`
+  - Updated `Checkpoint.spec` and `main.spec` icon path to `branding/checkpoint.ico`.
+- **Verification**: Verified tray icon loading and PyInstaller build spec compatibility.
+
+
