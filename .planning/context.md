@@ -105,5 +105,6 @@
   - Updated `Checkpoint.spec` and `main.spec` to remove private credential bundling (`datas=[('branding', 'branding')]`, embedded app icon).
   - Built standalone `dist\Checkpoint.exe` with PyInstaller.
   - Tagged and published GitHub Release `v1.4.0` with release notes and binary asset attached at `https://github.com/pranav6004/Checkpoint/releases/tag/v1.4.0`.
+  - Cleaned release notes: removed all emojis and eliminated internal secret/security disclosure details in favor of clean, professional changelog bullets.
 - **Verification**: All 12 unit tests passed in 0.165s.
 
