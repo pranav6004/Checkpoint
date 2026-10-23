@@ -1,0 +1,176 @@
+{
+  "project": "Checkpoint",
+  "description": "Windows background utility that watches save game folders and backs them up to Google Drive via system tray.",
+  "last_updated": "2026-10-24",
+  "rules": [
+    "Always read context.json first before starting tasks",
+    "Maintain context.md and context.json in .planning/",
+    "Use Windows PowerShell commands only, never Linux/bash",
+    "Keep code lean and surgical, avoiding over-engineering"
+  ],
+  "components": {
+    "main.py": "Application entry point, single-instance mutex enforcement, dependency checks, and subsystem orchestration.",
+    "config.py": "Configuration management (%APPDATA%\\Checkpoint\\config.json), GameConfig/AppConfig dataclasses, thread-safe atomic writes via os.replace, duplicate path checks.",
+    "auth.py": "Google Drive OAuth 2.0 InstalledAppFlow authentication, AppData/local credentials fallback, offline token refresh resilience, atomic token persistence.",
+    "uploader.py": "Folder zipping with filename sanitization, Drive v3 API query escaping (backslashes and quotes), safe old backup rotation.",
+    "watcher.py": "Watchdog filesystem event handler, path matching with directory boundaries/normcase, non-blocking asynchronous upload workers with active upload deduplication.",
+    "scanner.py": "Game save detection using Ludusavi manifest and cracked emulator directory scanning.",
+    "startup_manager.py": "Windows HKCU Run registry key management for auto-launch on boot.",
+    "tray.py": "Pystray system tray icon, menu actions, robust Tkinter dialog handling with explicit topmost parent and cleanup.",
+    "tests/test_checkpoint.py": "Unit test suite covering path resolution, prefix isolation, query escaping, atomic config persistence, and duplicate handling."
+  },
+  "audits": [
+    {
+      "date": "2026-10-23",
+      "type": "Ponytail and Security Quality Audit",
+      "status": "Remediated",
+      "findings_count": 10,
+      "must_fix_count": 5,
+      "should_fix_count": 4,
+      "nice_to_have_count": 1
+    }
+  ],
+  "bugs": [
+    {
+      "id": "BUG-001",
+      "date": "2026-10-23",
+      "title": "OAuth Client Secret bundled in release executable",
+      "file": "auth.py, README.md",
+      "status": "Fixed",
+      "fix": "Documented separate credentials placement in %APPDATA%\\Checkpoint\\credentials.json, warned against bundling private client secrets in PyInstaller builds, added multi-location discovery."
+    },
+    {
+      "id": "BUG-002",
+      "date": "2026-10-23",
+      "title": "Missing dependencies in requirements.txt crash fresh install",
+      "file": "requirements.txt, main.py",
+      "status": "Fixed",
+      "fix": "Added requests and pyyaml to requirements.txt, removed dead dependency psutil, aligned startup dependency validation."
+    },
+    {
+      "id": "BUG-003",
+      "date": "2026-10-23",
+      "title": "Tkinter dialog in secondary thread crashes UI without parent or cleanup",
+      "file": "tray.py",
+      "status": "Fixed",
+      "fix": "Wrapped dialog lifecycle in try/finally root.destroy(), bound dialogs to topmost root parent, handled add_game return status in notifications."
+    },
+    {
+      "id": "BUG-004",
+      "date": "2026-10-23",
+      "title": "Substring path matching triggers saves for the wrong game",
+      "file": "watcher.py",
+      "status": "Fixed",
+      "fix": "Normalized paths with os.path.normcase and checked exact equality or folder boundary separator (norm_game_path + os.sep) to prevent prefix collisions like Doom vs Doom Eternal."
+    },
+    {
+      "id": "BUG-005",
+      "date": "2026-10-23",
+      "title": "Drive query formatting crashes on backslashes in folder names",
+      "file": "uploader.py",
+      "status": "Fixed",
+      "fix": "Escaped backslashes before single quotes in Drive v3 query strings, sanitized zip filename game prefixes against illegal characters, guarded max_backups <= 0."
+    },
+    {
+      "id": "BUG-006",
+      "date": "2026-10-23",
+      "title": "Non-atomic configuration write risks wiping settings on power loss",
+      "file": "config.py",
+      "status": "Fixed",
+      "fix": "Implemented atomic file writing via temp file + os.replace, added threading.Lock to ConfigManager, and fixed duplicate path validation logic."
+    },
+    {
+      "id": "BUG-007",
+      "date": "2026-10-23",
+      "title": "Offline startup hangs or crashes with unhandled prompt in windowed mode",
+      "file": "auth.py, main.py",
+      "status": "Fixed",
+      "fix": "Preserved expired creds on network/refresh error so app boots offline without popping browser or resetting token, guarded input() in windowed mode against EOFError."
+    },
+    {
+      "id": "BUG-008",
+      "date": "2026-10-23",
+      "title": "Synchronous upload blocks all debounced game queues",
+      "file": "watcher.py",
+      "status": "Fixed",
+      "fix": "Dispatched uploads to daemon worker threads with active_uploads set tracking to avoid blocking the debounce loop and prevent concurrent duplicate uploads."
+    },
+    {
+      "id": "BUG-009",
+      "date": "2026-10-23",
+      "title": "Missing automated unit and regression tests",
+      "file": "tests/test_checkpoint.py",
+      "status": "Fixed",
+      "fix": "Added comprehensive test suite covering Ludusavi path resolution, watcher prefix isolation, query escaping, atomic config persistence, and duplicate rejection."
+    },
+    {
+      "id": "BUG-010",
+      "date": "2026-10-23",
+      "title": "Unused dependency psutil in requirements",
+      "file": "requirements.txt, main.py",
+      "status": "Fixed",
+      "fix": "Removed psutil from requirements.txt and dependency check message."
+    }
+  ],
+  "issues_faced": [
+    {
+      "date": "2026-10-23",
+      "issue": "Raw string literal in test_checkpoint.py with trailing backslash caused Python syntax error.",
+      "resolution": "Changed raw string r'Game\\' to standard string 'Game\\\\' with escaped backslash."
+    }
+  ],
+  "security_assessments": [
+    {
+      "date": "2026-10-23",
+      "topic": "Public repository and past binary/issue exposure",
+      "status": "Assessed and Actionable",
+      "findings": "Git history is completely clean of secrets. Desktop OAuth client secrets cannot access Drive data without user token.json. Rotation recommended for Google Cloud Console client ID and GitHub release binary cleanup."
+    },
+    {
+      "date": "2026-10-24",
+      "topic": "OAuth Credential Rotation Implementation",
+      "status": "Rotated and Installed",
+      "findings": "New client credentials installed in AppData and project root. auth.py updated with client mismatch detection and RefreshError self-healing re-authentication."
+    },
+    {
+      "date": "2026-10-24",
+      "topic": "GitHub Release Asset Cleanup & Branding Creation",
+      "status": "Completed",
+      "findings": "Deleted Checkpoint.exe assets from all 16 historical releases via gh CLI. Generated 3-concept logo suite, concepts.png sheet, full SVG/PNG variants, and integrated high-contrast tray logo into tray.py."
+    },
+    {
+      "date": "2026-10-24",
+      "topic": "Dark-Tech Gaming Logo Overhaul (v3 Concepts)",
+      "status": "Completed",
+      "findings": "Purged rejected clip-art concepts (flag/disk). Designed 3 production-grade dark-tech gaming identity marks (The Waypoint Beacon, The Warp Check, The Chrono Crystal), all scoring 100/100 on svg_audit. Generated concepts-v3.png, full variant export kit (SVG/PNG/favicon/webmanifest), and integrated dedicated high-contrast taskbar tray cut into tray.py."
+    },
+    {
+      "date": "2026-10-24",
+      "topic": "Concept A Tickless Variations Exploration",
+      "status": "Explored",
+      "findings": "Evaluated necessity of checkmark. Built 3 tickless alternatives (A1 Ascension Beacon, A2 Floating Nucleus, A3 Dimensional Gate) scoring 100/100 on svg_audit. Generated concepts-tickless.png and test tray badge checkpoint-tray-a2-32.png."
+    },
+    {
+      "date": "2026-10-24",
+      "topic": "Checkpoint v1.4.0 Release & Asset Finalization",
+      "status": "Completed",
+      "findings": "Finalized Concept A2 (The Floating Nucleus: 45° waypoint prism with floating electric cyan save crystal core) as official branding. Exported complete variant suite, wired high-contrast tray cut into tray.py, compiled clean Checkpoint.exe without bundled credentials, and tagged/published GitHub release v1.4.0."
+    }
+  ],
+  "skill_updates": [
+    {
+      "date": "2026-10-24",
+      "task": "Global Skills Update",
+      "status": "Completed",
+      "updated_skills": [
+        "hyperframes",
+        "hyperframes-cli",
+        "hyperframes-registry",
+        "media-use",
+        "onetake",
+        "oil-ui (v0.24.2)"
+      ],
+      "verification": "All skills in .gemini/config/skills synchronized with zero diffs."
+    }
+  ]
+}

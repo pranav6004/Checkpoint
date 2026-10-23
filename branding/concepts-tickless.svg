@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1600" height="840" viewBox="0 0 1600 840"><rect width="1600" height="840" fill="#f7f7f4"/><text x="60" y="78" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="40" font-weight="700" fill="#161616">Checkpoint — Concept A Tickless Explorations</text><text x="60" y="116" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="20" fill="#6b6b6b">Removing the task-list checkmark: pure gaming waypoint &amp; cloud save geometry</text><rect x="60" y="150" width="474.667" height="630" rx="18" fill="#fff" stroke="#e4e4e0" stroke-width="1"/><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="90" y="190" width="414.667" height="300" preserveAspectRatio="xMidYMid meet">
+  <title>Checkpoint - Concept A1: The Ascension Beacon</title>
+  <!-- Outer Diamond Waypoint (Tech Blue) -->
+  <path d="M 128,32 L 32,128 L 68,128 L 128,68 L 188,128 L 224,128 Z" fill="#0284C7"/>
+  <!-- Bottom Left Bevel (Obsidian/Navy Depth) -->
+  <path d="M 32,128 L 128,224 L 128,188 L 68,128 Z" fill="#0369A1"/>
+  <!-- Bottom Right Bevel -->
+  <path d="M 224,128 L 128,224 L 128,188 L 188,128 Z" fill="#0284C7"/>
+  <!-- Centered Ascending Vector Chevron (Electric Cyan #00E5FF) -->
+  <path d="M 128,76 L 180,128 L 152,128 L 128,104 L 104,128 L 76,128 Z" fill="#00E5FF"/>
+  <!-- Lower Sync Anchor Bar -->
+  <path d="M 128,124 L 164,160 L 140,160 L 128,148 L 116,160 L 92,160 Z" fill="#38BDF8"/>
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="90" y="516" width="64" height="64" preserveAspectRatio="xMidYMid meet">
+  <title>Checkpoint - Concept A1: The Ascension Beacon</title>
+  <!-- Outer Diamond Waypoint (Tech Blue) -->
+  <path d="M 128,32 L 32,128 L 68,128 L 128,68 L 188,128 L 224,128 Z" fill="#0284C7"/>
+  <!-- Bottom Left Bevel (Obsidian/Navy Depth) -->
+  <path d="M 32,128 L 128,224 L 128,188 L 68,128 Z" fill="#0369A1"/>
+  <!-- Bottom Right Bevel -->
+  <path d="M 224,128 L 128,224 L 128,188 L 188,128 Z" fill="#0284C7"/>
+  <!-- Centered Ascending Vector Chevron (Electric Cyan #00E5FF) -->
+  <path d="M 128,76 L 180,128 L 152,128 L 128,104 L 104,128 L 76,128 Z" fill="#00E5FF"/>
+  <!-- Lower Sync Anchor Bar -->
+  <path d="M 128,124 L 164,160 L 140,160 L 128,148 L 116,160 L 92,160 Z" fill="#38BDF8"/>
+</svg>
+</g><text x="122" y="600" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">64px</text><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="180" y="548" width="32" height="32" preserveAspectRatio="xMidYMid meet">
+  <title>Checkpoint - Concept A1: The Ascension Beacon</title>
+  <!-- Outer Diamond Waypoint (Tech Blue) -->
+  <path d="M 128,32 L 32,128 L 68,128 L 128,68 L 188,128 L 224,128 Z" fill="#0284C7"/>
+  <!-- Bottom Left Bevel (Obsidian/Navy Depth) -->
+  <path d="M 32,128 L 128,224 L 128,188 L 68,128 Z" fill="#0369A1"/>
+  <!-- Bottom Right Bevel -->
+  <path d="M 224,128 L 128,224 L 128,188 L 188,128 Z" fill="#0284C7"/>
+  <!-- Centered Ascending Vector Chevron (Electric Cyan #00E5FF) -->
+  <path d="M 128,76 L 180,128 L 152,128 L 128,104 L 104,128 L 76,128 Z" fill="#00E5FF"/>
+  <!-- Lower Sync Anchor Bar -->
+  <path d="M 128,124 L 164,160 L 140,160 L 128,148 L 116,160 L 92,160 Z" fill="#38BDF8"/>
+</svg>
+</g><text x="196" y="600" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">32px</text><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="238" y="564" width="16" height="16" preserveAspectRatio="xMidYMid meet">
+  <title>Checkpoint - Concept A1: The Ascension Beacon</title>
+  <!-- Outer Diamond Waypoint (Tech Blue) -->
+  <path d="M 128,32 L 32,128 L 68,128 L 128,68 L 188,128 L 224,128 Z" fill="#0284C7"/>
+  <!-- Bottom Left Bevel (Obsidian/Navy Depth) -->
+  <path d="M 32,128 L 128,224 L 128,188 L 68,128 Z" fill="#0369A1"/>
+  <!-- Bottom Right Bevel -->
+  <path d="M 224,128 L 128,224 L 128,188 L 188,128 Z" fill="#0284C7"/>
+  <!-- Centered Ascending Vector Chevron (Electric Cyan #00E5FF) -->
+  <path d="M 128,76 L 180,128 L 152,128 L 128,104 L 104,128 L 76,128 Z" fill="#00E5FF"/>
+  <!-- Lower Sync Anchor Bar -->
+  <path d="M 128,124 L 164,160 L 140,160 L 128,148 L 116,160 L 92,160 Z" fill="#38BDF8"/>
+</svg>
+</g><text x="246" y="600" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">16px</text><text x="90.0" y="636" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#161616">A · A1 · Ascension Beacon</text><text x="90.0" y="670" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">Upward sync chevron &amp; warp vector inside</text><text x="90.0" y="696" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">diamond frame (cloud elevation)</text><rect x="562.667" y="150" width="474.667" height="630" rx="18" fill="#fff" stroke="#161616" stroke-width="2"/><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="592.667" y="190" width="414.667" height="300" preserveAspectRatio="xMidYMid meet">
+  <title>Checkpoint - Concept A2: The Floating Nucleus</title>
+  <!-- Top Facet (Tech Blue) -->
+  <path d="M 128,32 L 32,128 L 72,128 L 128,72 L 184,128 L 224,128 Z" fill="#0284C7"/>
+  <!-- Bottom Left Facet (Midnight Depth) -->
+  <path d="M 32,128 L 128,224 L 128,184 L 72,128 Z" fill="#0369A1"/>
+  <!-- Bottom Right Facet (Steel Slate) -->
+  <path d="M 224,128 L 128,224 L 128,184 L 184,128 Z" fill="#0EA5E9"/>
+  <!-- Inner Floating Waypoint Nucleus / Save Crystal Core (Electric Cyan #00E5FF) -->
+  <path d="M 128,96 L 160,128 L 128,160 L 96,128 Z" fill="#00E5FF"/>
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="592.667" y="516" width="64" height="64" preserveAspectRatio="xMidYMid meet">
+  <title>Checkpoint - Concept A2: The Floating Nucleus</title>
+  <!-- Top Facet (Tech Blue) -->
+  <path d="M 128,32 L 32,128 L 72,128 L 128,72 L 184,128 L 224,128 Z" fill="#0284C7"/>
+  <!-- Bottom Left Facet (Midnight Depth) -->
+  <path d="M 32,128 L 128,224 L 128,184 L 72,128 Z" fill="#0369A1"/>
+  <!-- Bottom Right Facet (Steel Slate) -->
+  <path d="M 224,128 L 128,224 L 128,184 L 184,128 Z" fill="#0EA5E9"/>
+  <!-- Inner Floating Waypoint Nucleus / Save Crystal Core (Electric Cyan #00E5FF) -->
+  <path d="M 128,96 L 160,128 L 128,160 L 96,128 Z" fill="#00E5FF"/>
+</svg>
+</g><text x="624.667" y="600" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">64px</text><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="682.667" y="548" width="32" height="32" preserveAspectRatio="xMidYMid meet">
+  <title>Checkpoint - Concept A2: The Floating Nucleus</title>
+  <!-- Top Facet (Tech Blue) -->
+  <path d="M 128,32 L 32,128 L 72,128 L 128,72 L 184,128 L 224,128 Z" fill="#0284C7"/>
+  <!-- Bottom Left Facet (Midnight Depth) -->
+  <path d="M 32,128 L 128,224 L 128,184 L 72,128 Z" fill="#0369A1"/>
+  <!-- Bottom Right Facet (Steel Slate) -->
+  <path d="M 224,128 L 128,224 L 128,184 L 184,128 Z" fill="#0EA5E9"/>
+  <!-- Inner Floating Waypoint Nucleus / Save Crystal Core (Electric Cyan #00E5FF) -->
+  <path d="M 128,96 L 160,128 L 128,160 L 96,128 Z" fill="#00E5FF"/>
+</svg>
+</g><text x="698.667" y="600" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">32px</text><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="740.667" y="564" width="16" height="16" preserveAspectRatio="xMidYMid meet">
+  <title>Checkpoint - Concept A2: The Floating Nucleus</title>
+  <!-- Top Facet (Tech Blue) -->
+  <path d="M 128,32 L 32,128 L 72,128 L 128,72 L 184,128 L 224,128 Z" fill="#0284C7"/>
+  <!-- Bottom Left Facet (Midnight Depth) -->
+  <path d="M 32,128 L 128,224 L 128,184 L 72,128 Z" fill="#0369A1"/>
+  <!-- Bottom Right Facet (Steel Slate) -->
+  <path d="M 224,128 L 128,224 L 128,184 L 184,128 Z" fill="#0EA5E9"/>
+  <!-- Inner Floating Waypoint Nucleus / Save Crystal Core (Electric Cyan #00E5FF) -->
+  <path d="M 128,96 L 160,128 L 128,160 L 96,128 Z" fill="#00E5FF"/>
+</svg>
+</g><text x="748.667" y="600" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">16px</text><text x="592.6666666666667" y="636" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#161616">B · A2 · Floating Nucleus</text><text x="592.6666666666667" y="664" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="15" font-weight="700" fill="#161616" letter-spacing="1.5">RECOMMENDED</text><text x="592.6666666666667" y="698" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">Pure waypoint frame with floating electric</text><text x="592.6666666666667" y="724" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">cyan save crystal core</text><rect x="1065.33" y="150" width="474.667" height="630" rx="18" fill="#fff" stroke="#e4e4e0" stroke-width="1"/><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="1095.33" y="190" width="414.667" height="300" preserveAspectRatio="xMidYMid meet">
+  <title>Checkpoint - Concept A3: The Warp Gate</title>
+  <!-- Upper Left Primary Band (Electric Cyan #00E5FF) -->
+  <path d="M 128,32 L 32,128 L 72,128 L 128,72 L 184,128 L 184,104 L 128,48 Z" fill="#00E5FF"/>
+  <!-- Lower Right Interlocking Band (Tech Blue #0284C7) -->
+  <path d="M 128,224 L 224,128 L 184,128 L 128,184 L 72,128 L 72,152 L 128,208 Z" fill="#0284C7"/>
+  <!-- Depth Shadow Corner -->
+  <path d="M 72,128 L 128,184 L 128,160 L 88,120 Z" fill="#0369A1"/>
+</svg>
+</g><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="1095.33" y="516" width="64" height="64" preserveAspectRatio="xMidYMid meet">
+  <title>Checkpoint - Concept A3: The Warp Gate</title>
+  <!-- Upper Left Primary Band (Electric Cyan #00E5FF) -->
+  <path d="M 128,32 L 32,128 L 72,128 L 128,72 L 184,128 L 184,104 L 128,48 Z" fill="#00E5FF"/>
+  <!-- Lower Right Interlocking Band (Tech Blue #0284C7) -->
+  <path d="M 128,224 L 224,128 L 184,128 L 128,184 L 72,128 L 72,152 L 128,208 Z" fill="#0284C7"/>
+  <!-- Depth Shadow Corner -->
+  <path d="M 72,128 L 128,184 L 128,160 L 88,120 Z" fill="#0369A1"/>
+</svg>
+</g><text x="1127.33" y="600" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">64px</text><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="1185.33" y="548" width="32" height="32" preserveAspectRatio="xMidYMid meet">
+  <title>Checkpoint - Concept A3: The Warp Gate</title>
+  <!-- Upper Left Primary Band (Electric Cyan #00E5FF) -->
+  <path d="M 128,32 L 32,128 L 72,128 L 128,72 L 184,128 L 184,104 L 128,48 Z" fill="#00E5FF"/>
+  <!-- Lower Right Interlocking Band (Tech Blue #0284C7) -->
+  <path d="M 128,224 L 224,128 L 184,128 L 128,184 L 72,128 L 72,152 L 128,208 Z" fill="#0284C7"/>
+  <!-- Depth Shadow Corner -->
+  <path d="M 72,128 L 128,184 L 128,160 L 88,120 Z" fill="#0369A1"/>
+</svg>
+</g><text x="1201.33" y="600" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">32px</text><g><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" x="1243.33" y="564" width="16" height="16" preserveAspectRatio="xMidYMid meet">
+  <title>Checkpoint - Concept A3: The Warp Gate</title>
+  <!-- Upper Left Primary Band (Electric Cyan #00E5FF) -->
+  <path d="M 128,32 L 32,128 L 72,128 L 128,72 L 184,128 L 184,104 L 128,48 Z" fill="#00E5FF"/>
+  <!-- Lower Right Interlocking Band (Tech Blue #0284C7) -->
+  <path d="M 128,224 L 224,128 L 184,128 L 128,184 L 72,128 L 72,152 L 128,208 Z" fill="#0284C7"/>
+  <!-- Depth Shadow Corner -->
+  <path d="M 72,128 L 128,184 L 128,160 L 88,120 Z" fill="#0369A1"/>
+</svg>
+</g><text x="1251.33" y="600" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="12" fill="#8a8a8a" text-anchor="middle">16px</text><text x="1095.3333333333335" y="636" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="26" font-weight="700" fill="#161616">C · A3 · Dimensional Gate</text><text x="1095.3333333333335" y="670" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">Interlocking 45° geometric bands forming an</text><text x="1095.3333333333335" y="696" font-family="system-ui,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-size="19" fill="#555">open warp portal</text></svg>

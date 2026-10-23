@@ -18,11 +18,12 @@ class DriveUploader:
         self.root_folder_id = self._get_or_create_folder(ROOT_FOLDER_NAME)
         
     def _get_or_create_folder(self, folder_name, parent_id=None):
-        # Escape single quotes for Google Drive API query syntax
-        safe_name = folder_name.replace("'", "\\'")
+        # Escape backslashes first, then single quotes for Google Drive API query syntax
+        safe_name = folder_name.replace('\\', '\\\\').replace("'", "\\'")
         query = f"name='{safe_name}' and mimeType='application/vnd.google-apps.folder' and trashed=false"
         if parent_id:
-            query += f" and '{parent_id}' in parents"
+            safe_parent = parent_id.replace('\\', '\\\\').replace("'", "\\'")
+            query += f" and '{safe_parent}' in parents"
             
         results = self.service.files().list(
             q=query, spaces='drive', fields='files(id, name)').execute()
@@ -47,8 +48,13 @@ class DriveUploader:
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         zip_filename = f"save_{timestamp}.zip"
         
+        # Sanitize game_name for Windows filename safety
+        safe_prefix = "".join(c if c.isalnum() or c in (' ', '_', '-') else '_' for c in game_name).strip()
+        if not safe_prefix:
+            safe_prefix = "game"
+            
         # We put the temporary zip in the system's temp directory
-        zip_path = os.path.join(tempfile.gettempdir(), f"{game_name}_{zip_filename}")
+        zip_path = os.path.join(tempfile.gettempdir(), f"{safe_prefix}_{zip_filename}")
         
         with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
             if os.path.isfile(folder_path):
@@ -126,8 +132,12 @@ class DriveUploader:
                     print(f"Warning: Could not remove temp file {zip_path} after 3 attempts.")
 
     def _cleanup_old_backups(self, folder_id, max_backups):
+        if max_backups <= 0:
+            return
+
+        safe_folder_id = folder_id.replace('\\', '\\\\').replace("'", "\\'")
         # Order by creation time descending (newest first)
-        query = f"'{folder_id}' in parents and mimeType='application/zip' and trashed=false"
+        query = f"'{safe_folder_id}' in parents and mimeType='application/zip' and trashed=false"
         results = self.service.files().list(
             q=query, spaces='drive', 
             orderBy='createdTime desc',

@@ -41,10 +41,12 @@ To build Checkpoint yourself, you need Python and your own Google Cloud credenti
 You can build a standalone executable using `PyInstaller`:
 
 ```cmd
-pyinstaller --noconfirm --onefile --windowed --add-data "credentials.json;." main.py
+pyinstaller --noconfirm --onefile --windowed main.py
 ```
 
-The resulting `.exe` will be built into the `dist/` folder. It bundles your `credentials.json` internally so end users do not need to deal with the Google API developer setup.
+The resulting `.exe` will be built into the `dist/` folder. Users can place their own `credentials.json` either in the same folder as `Checkpoint.exe` or in `%APPDATA%\Checkpoint\credentials.json`. 
+
+> **Security Note**: Avoid distributing public builds with `--add-data "credentials.json;."` containing personal Google Cloud client secrets, as bundled files can be extracted from PyInstaller executables.
 
 ## Privacy Policy
 Checkpoint asks for the **"See, edit, create, and delete only the specific Google Drive files you use with this app"** permission (`https://www.googleapis.com/auth/drive.file`).

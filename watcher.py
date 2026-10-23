@@ -37,6 +37,7 @@ class Watcher:
         
         # Debounce state management
         self.pending_uploads = {} # game_name -> timestamp to upload
+        self.active_uploads = set() # games currently uploading
         self.debounce_timer = None
         self.is_running = False
         self.lock = threading.Lock()
@@ -54,11 +55,11 @@ class Watcher:
         self.debounce_timer.start()
 
     def get_game_for_path(self, path):
-        path = os.path.abspath(path)
+        norm_path = os.path.normcase(os.path.abspath(path))
         for game in config_manager.config.games:
-            game_path = os.path.abspath(game.save_path)
-            # Check if modified path is under the game save folder
-            if path.startswith(game_path):
+            norm_game_path = os.path.normcase(os.path.abspath(game.save_path))
+            # Ensure exact match or proper directory boundary (subpath)
+            if norm_path == norm_game_path or norm_path.startswith(norm_game_path + os.sep):
                 return game.name
         return None
 
@@ -77,12 +78,24 @@ class Watcher:
             with self.lock:
                 for game_name, upload_time in list(self.pending_uploads.items()):
                     if now >= upload_time:
-                        to_upload.append(game_name)
-                        del self.pending_uploads[game_name]
+                        if game_name in self.active_uploads:
+                            # Re-queue with a small delay if already uploading
+                            self.pending_uploads[game_name] = now + 5
+                        else:
+                            to_upload.append(game_name)
+                            del self.pending_uploads[game_name]
+                            self.active_uploads.add(game_name)
             
-            # Perform uploads outside the lock so we don't block other save events
+            # Dispatch non-blocking worker threads so other games aren't stalled
             for game_name in to_upload:
-                self._do_upload(game_name)
+                threading.Thread(target=self._run_upload_worker, args=(game_name,), daemon=True).start()
+
+    def _run_upload_worker(self, game_name):
+        try:
+            self._do_upload(game_name)
+        finally:
+            with self.lock:
+                self.active_uploads.discard(game_name)
 
     def _do_upload(self, game_name):
         game_config = next((g for g in config_manager.config.games if g.name == game_name), None)

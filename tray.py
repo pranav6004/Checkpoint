@@ -19,14 +19,33 @@ class TrayMenu:
         self.watcher.set_notification_callback(self.notify)
 
     def create_image(self):
-        # Generate a simple icon programmatically
-        # Blue circle with a white upload cloud/arrow
+        # Load high-contrast Checkpoint tray logo
+        branding_dir = os.path.join(os.path.dirname(__file__), "branding")
+        tray_candidates = [
+            os.path.join(branding_dir, "checkpoint-tray-32.png"),
+            os.path.join(branding_dir, "checkpoint-tray-64.png"),
+            os.path.join(branding_dir, "checkpoint-tray-16.png"),
+            os.path.join(branding_dir, "checkpoint-app-icon-64.png"),
+            os.path.join(branding_dir, "checkpoint-app-icon-32.png")
+        ]
+        for icon_path in tray_candidates:
+            if os.path.exists(icon_path):
+                try:
+                    return Image.open(icon_path)
+                except Exception as e:
+                    print(f"Warning: Could not open {icon_path}: {e}")
+
+        # Programmatic high-contrast fallback: Dark obsidian tile with floating save crystal core
         image = Image.new('RGBA', (64, 64), (0, 0, 0, 0))
         d = ImageDraw.Draw(image)
-        # Blue circle
-        d.ellipse((4, 4, 60, 60), fill=(66, 133, 244))
-        # White up arrow
-        d.polygon([(32, 16), (16, 36), (26, 36), (26, 48), (38, 48), (38, 36), (48, 36)], fill=(255, 255, 255))
+        # Deep Obsidian badge
+        d.rounded_rectangle((2, 2, 62, 62), radius=14, fill=(11, 15, 25))
+        # Tech Blue outer waypoint facets
+        d.polygon([(32, 10), (12, 30), (20, 30), (32, 18), (44, 30), (52, 30)], fill=(2, 132, 199))
+        d.polygon([(12, 30), (32, 50), (32, 42), (20, 30)], fill=(3, 105, 161))
+        d.polygon([(52, 30), (32, 50), (32, 42), (44, 30)], fill=(14, 165, 233))
+        # Floating Save Crystal Nucleus (Electric Cyan)
+        d.polygon([(32, 24), (38, 30), (32, 36), (26, 30)], fill=(0, 229, 255))
         return image
 
     def run(self):
@@ -147,37 +166,47 @@ class TrayMenu:
 
     def action_add_game(self, icon, item):
         def add_game_job():
-            # Create a hidden root window for tkinter dialogs
-            root = tk.Tk()
-            root.withdraw()
-            root.attributes('-topmost', True)
-            
-            # Step 1: Pick folder
-            folder_path = filedialog.askdirectory(title="Select Save Folder")
-            if not folder_path:
-                root.destroy()
-                return
+            root = None
+            try:
+                # Create a hidden root window for tkinter dialogs
+                root = tk.Tk()
+                root.withdraw()
+                root.attributes('-topmost', True)
                 
-            # Step 2: Name it
-            game_name = simpledialog.askstring("Game Name", "Enter the name of the game (e.g., 'Elden Ring'):", parent=root)
-            if not game_name or not game_name.strip():
-                root.destroy()
-                return
+                # Step 1: Pick folder
+                folder_path = filedialog.askdirectory(parent=root, title="Select Save Folder")
+                if not folder_path:
+                    return
+                    
+                # Step 2: Name it
+                game_name = simpledialog.askstring("Game Name", "Enter the name of the game (e.g., 'Elden Ring'):", parent=root)
+                if not game_name or not game_name.strip():
+                    return
+                    
+                # Add to config
+                game_name = game_name.strip()
+                success = config_manager.add_game(game_name, folder_path)
                 
-            # Add to config
-            game_name = game_name.strip()
-            config_manager.add_game(game_name, folder_path)
+                if success:
+                    # Tell watcher to pick up the new folder
+                    self.watcher.refresh_watches()
+                    
+                    # Update tray menu count
+                    self._update_menu()
+                    self.notify("Game Added", f"Now watching {game_name}.")
+                else:
+                    self.notify("Add Game Failed", f"Could not add {game_name}. Path may already be tracked.")
+            except Exception as e:
+                print(f"Error in add_game dialog: {e}")
+                self.notify("Add Game Error", str(e))
+            finally:
+                if root:
+                    try:
+                        root.destroy()
+                    except Exception:
+                        pass
             
-            # Tell watcher to pick up the new folder
-            self.watcher.refresh_watches()
-            
-            # Update tray menu count
-            self._update_menu()
-            
-            root.destroy()
-            self.notify("Game Added", f"Now watching {game_name}.")
-            
-        threading.Thread(target=add_game_job).start()
+        threading.Thread(target=add_game_job, daemon=True).start()
 
     def action_open_settings(self, icon, item):
         # Open the config file in the default OS text editor

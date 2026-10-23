@@ -29,7 +29,7 @@ def check_dependencies():
         print("ERROR: Missing dependencies.")
         print(f"Missing: {e.name}")
         print("\nPlease install the required packages using:")
-        print("pip install google-api-python-client google-auth-oauthlib pystray Pillow watchdog psutil requests pyyaml")
+        print("pip install google-api-python-client google-auth-oauthlib pystray Pillow watchdog requests pyyaml")
         sys.exit(1)
 
 def main():
@@ -56,7 +56,11 @@ def main():
         uploader = DriveUploader()
     except Exception as e:
         print(f"Failed to initialize Google Drive connection: {e}")
-        input("Press Enter to exit...")
+        if sys.stdin and sys.stdin.isatty():
+            try:
+                input("Press Enter to exit...")
+            except (EOFError, OSError):
+                pass
         sys.exit(1)
         
     # 2. Initialize the file watcher
